@@ -10,8 +10,6 @@ type Pokemon = {
 
 function App() {
 
-
-const [boton, setBoton] = useState(false)
 const [input, setInput] = useState("")
 const [pokemon, setPokemon] = useState<Pokemon | null>(null);
 const [nombre, setNombre] = useState("")
@@ -23,12 +21,15 @@ function inputEscrito (e) {
 function botonBuscar () {
     setNombre(input)
 }
+
 useEffect (() => {
     const fetchPokemon = async () => {
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}/`)
         const data = await response.json()
         console.log(data)
+        setPokemon(data)
+
     } catch(error) {
         console.error("error", error)
     }
@@ -39,10 +40,14 @@ if(input) {
 }, [nombre])
 return (
     <div>
-        <input value={input} onChange={inputEscrito}></input>
+        <input value={input} onChange={inputEscrito} placeholder="Ej. Ceruledge"></input>
         <button onClick={botonBuscar}>buscar</button>
-        {pokemon &&
-        <p>{pokemon.name}</p>}
+        {pokemon && (
+            <div>
+                <p>{pokemon.name}</p>
+                <p>{pokemon.id}</p>
+            </div>
+        )}
     </div>
 )
 }
